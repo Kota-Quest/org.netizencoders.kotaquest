@@ -8,25 +8,25 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class   MainActivity : AppCompatActivity() {
-    private lateinit var button: Button
+//    private lateinit var button: Button
 
-    private val db = Firebase.firestore
+//    private val db = Firebase.firestore
 
-    private val user = hashMapOf(
-        "first" to "Dea",
-        "last" to "Aurora",
-        "born" to 2019
-    )
+//    private val user = hashMapOf(
+//        "first" to "Dea",
+//        "last" to "Aurora",
+//        "born" to 2019
+//    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        button = findViewById(R.id.button)
-        button.setOnClickListener {
-            addData()
-            readData()
-        }
+//        button = findViewById(R.id.button)
+//        button.setOnClickListener {
+//            addData()
+//            readData()
+//        }
 
     }
 
