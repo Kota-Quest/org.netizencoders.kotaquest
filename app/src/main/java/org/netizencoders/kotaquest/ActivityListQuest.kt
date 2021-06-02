@@ -1,7 +1,9 @@
 package org.netizencoders.kotaquest
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -15,6 +17,7 @@ class ActivityListQuest : AppCompatActivity() {
     private lateinit var qLocation: TextView
     private lateinit var qDesc: TextView
     private lateinit var qImage: ImageView
+    private lateinit var buttonNew: Button
 
     private var listofquest = arrayListOf<Quest>()
 
@@ -26,6 +29,12 @@ class ActivityListQuest : AppCompatActivity() {
         qLocation = findViewById(R.id.quest_location)
         qDesc = findViewById(R.id.quest_desc)
         qImage = findViewById(R.id.quest_img)
+
+        buttonNew = findViewById(R.id.quest_new)
+        buttonNew.setOnClickListener {
+            val moveIntent = Intent(this, ActivityNewQuest::class.java)
+            startActivity(moveIntent)
+        }
 
         readData()
     }
