@@ -53,63 +53,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/quest_location" />
 
+    <ImageView
+        android:id="@+id/quest_img"
+        android:layout_width="350dp"
+        android:layout_height="197dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/quest_desc"/>
+
     <Button
         android:id="@+id/quest_detail"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:text="Detail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/quest_desc" />
-
-    <TextView
-        android:id="@+id/quest_name2"
-        android:layout_width="350dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="30dp"
-        android:text="Temukan Kuda"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/quest_detail" />
-
-    <TextView
-        android:id="@+id/quest_location2"
-        android:layout_width="350dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="10dp"
-        android:text="Location: Jakarta Selatan"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/quest_name2" />
-
-    <TextView
-        android:id="@+id/quest_desc2"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Description: Twas bryllyg, and ye slythy toves Did gyre and gymble in ye wabe."
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/quest_location2" />
-
-    <Button
-        android:id="@+id/quest_detail2"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="Detail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/quest_desc2" />
-
+        app:layout_constraintTop_toBottomOf="@+id/quest_img" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
