@@ -155,6 +155,8 @@ class ActivityListQuestsTaken : AppCompatActivity() {
             "Yes") { _, _ ->
             removeQuest(quest.ID.toString(), ActivityLogin.uid+"-quests-taken")
             Toast.makeText(this, "Quest finished", Toast.LENGTH_SHORT).show()
+            val moveIntent = Intent(this, ActivityListQuestsTaken::class.java)
+            startActivity(moveIntent)
         }
 
         builder.setNegativeButton(
@@ -189,7 +191,7 @@ class ActivityListQuestsTaken : AppCompatActivity() {
         data["Location"] = quest.Location.toString()
         data["Description"] = quest.Description.toString()
         data["ImageURL"] = quest.ImageURL.toString()
-        data["Status"] = "In Progress"
+        data["Status"] = "Posted"
         data["Poster"] = quest.Poster.toString()
         data["DatePosted"] = quest.DatePosted.toString()
         data["DateCompleted"] = quest.DateCompleted.toString()
