@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
-import org.netizencoders.kotaquest.helpers.ListDataAdapter
+import org.netizencoders.kotaquest.helpers.ListDataAdapter2
 import org.netizencoders.kotaquest.models.Quest
 
 class ActivityListQuestsTaken : AppCompatActivity() {
@@ -125,12 +125,12 @@ class ActivityListQuestsTaken : AppCompatActivity() {
     private fun showRecyclerList(data: ArrayList<Quest>) {
         quests.setHasFixedSize(true)
         quests.layoutManager = LinearLayoutManager(this)
-        val listItemAdapter = ListDataAdapter(data)
+        val listItemAdapter = ListDataAdapter2(data)
         quests.adapter = listItemAdapter
 
         listItemAdapter.notifyDataSetChanged()
 
-        listItemAdapter.setOnItemBtnClickCallback(object : ListDataAdapter.OnItemBtnClickCallback {
+        listItemAdapter.setOnItemBtnClickCallback(object : ListDataAdapter2.OnItemBtnClickCallback {
             override fun onItemBtnClicked(data: Quest, button: String) {
                 when (button) {
                     "btnR" -> {
@@ -146,7 +146,7 @@ class ActivityListQuestsTaken : AppCompatActivity() {
     }
 
     private fun finishQuest(quest: Quest) {
-        val builder = AlertDialog.Builder(applicationContext)
+        val builder = AlertDialog.Builder(this)
 
         builder.setTitle(quest.Title)
         builder.setMessage("Report and finish Quest?")
@@ -165,7 +165,7 @@ class ActivityListQuestsTaken : AppCompatActivity() {
     }
 
     private fun dropQuest(quest: Quest) {
-        val builder = AlertDialog.Builder(applicationContext)
+        val builder = AlertDialog.Builder(this)
 
         builder.setTitle(quest.Title)
         builder.setMessage("Are you sure you want to drop this Quest?")
