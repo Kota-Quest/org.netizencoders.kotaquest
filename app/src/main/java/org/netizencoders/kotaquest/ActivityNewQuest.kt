@@ -22,6 +22,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import org.netizencoders.kotaquest.models.Quest
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -91,6 +92,7 @@ class ActivityNewQuest : AppCompatActivity() {
         if (filePath != null) {
             uploadImage()
         } else {
+            qImageURL = ""
             prepareQuest()
         }
     }
@@ -161,9 +163,12 @@ class ActivityNewQuest : AppCompatActivity() {
     }
 
     fun prepareQuest() {
+        val simpleDateFormat = SimpleDateFormat.getDateTimeInstance()
+        val currentDateAndTime: String = simpleDateFormat.format(Date())
+
         val quest = Quest(
             "", qTitle.text.toString(), qLocation.text.toString(), qDescription.text.toString(),
-            qImageURL, "", "", "", ""
+            qImageURL, "Posted", ActivityLogin.uid, currentDateAndTime, ""
         )
 
         val data: HashMap<String, Any> = HashMap()
