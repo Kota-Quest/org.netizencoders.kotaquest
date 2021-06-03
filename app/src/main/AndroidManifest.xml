@@ -17,6 +17,9 @@
         <activity android:name=".ActivityListQuest"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
+        <activity android:name=".ActivityListMyQuests"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
         <activity android:name=".ActivityNewQuest"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
