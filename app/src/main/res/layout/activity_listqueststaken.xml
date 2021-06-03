@@ -8,7 +8,7 @@
     tools:context=".MainActivity">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/quest_list_no_data"
+        android:id="@+id/quest_list_taken_no_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -22,7 +22,7 @@
         />
 
     <TextView
-        android:id="@+id/quest_list_label"
+        android:id="@+id/quest_list_taken_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -33,10 +33,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/quest_list_items"
+        android:id="@+id/quest_list_taken_items"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toBottomOf="@+id/quest_list_label"
+        app:layout_constraintTop_toBottomOf="@+id/quest_list_taken_label"
         android:layout_marginTop="80dp"
         tools:listitem="@layout/quest_item_taken" />
 
@@ -51,7 +51,7 @@
         app:menu="@menu/bottom_nav"/>
 
     <ProgressBar
-        android:id="@+id/quest_list_progressbar"
+        android:id="@+id/quest_list_taken_progressbar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
