@@ -1,16 +1,19 @@
 package org.netizencoders.kotaquest
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
+import android.view.WindowManager
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
@@ -18,7 +21,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class ActivityLogin : AppCompatActivity() {
-    private lateinit var button: Button
+    private lateinit var button: SignInButton
     private lateinit var progressbar: ProgressBar
 
     private lateinit var auth: FirebaseAuth
@@ -30,6 +33,12 @@ class ActivityLogin : AppCompatActivity() {
 
         supportActionBar?.hide()
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = Color.WHITE
+        }
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("707484987537-jss0re8cje6mgi7tipp5immtfrjpvg69.apps.googleusercontent.com")
             .requestEmail()
@@ -40,7 +49,8 @@ class ActivityLogin : AppCompatActivity() {
         auth = Firebase.auth
 
         progressbar = findViewById(R.id.login_progressbar)
-        button = findViewById(R.id.login)
+        button = findViewById(R.id.login_sign_in_button)
+        button.setSize(SignInButton.SIZE_WIDE)
         button.setOnClickListener {
             signIn()
         }
