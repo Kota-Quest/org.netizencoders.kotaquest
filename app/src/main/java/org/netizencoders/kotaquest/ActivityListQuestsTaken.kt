@@ -29,10 +29,10 @@ class ActivityListQuestsTaken : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        quests = findViewById(R.id.quest_list_items)
+        quests = findViewById(R.id.quest_list_taken_items)
         quests.setHasFixedSize(true)
-        progressbar = findViewById(R.id.quest_list_progressbar)
-        noDataLabel = findViewById(R.id.quest_list_no_data)
+        progressbar = findViewById(R.id.quest_list_taken_progressbar)
+        noDataLabel = findViewById(R.id.quest_list_taken_no_data)
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
         bottomNavigationView.selectedItemId = R.id.h2
@@ -154,7 +154,7 @@ class ActivityListQuestsTaken : AppCompatActivity() {
         builder.setPositiveButton(
             "Yes") { _, _ ->
             removeQuest(quest.ID.toString(), ActivityLogin.uid+"-quests-taken")
-            Toast.makeText(this, "Quest reported to Poster \nQuest finished", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Quest finished", Toast.LENGTH_SHORT).show()
         }
 
         builder.setNegativeButton(
