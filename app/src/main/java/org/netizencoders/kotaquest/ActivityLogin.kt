@@ -4,7 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -17,6 +19,7 @@ import com.google.firebase.ktx.Firebase
 
 class ActivityLogin : AppCompatActivity() {
     private lateinit var button: Button
+    private lateinit var progressbar: ProgressBar
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -36,6 +39,7 @@ class ActivityLogin : AppCompatActivity() {
 
         auth = Firebase.auth
 
+        progressbar = findViewById(R.id.login_progressbar)
         button = findViewById(R.id.login)
         button.setOnClickListener {
             signIn()
@@ -57,6 +61,7 @@ class ActivityLogin : AppCompatActivity() {
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
+            progressbar.visibility = View.VISIBLE
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 // Google Sign In was successful, authenticate with Firebase
@@ -67,6 +72,7 @@ class ActivityLogin : AppCompatActivity() {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e)
                 Toast.makeText(this, "Sign in failed", Toast.LENGTH_LONG).show()
+                progressbar.visibility = View.INVISIBLE
             }
         }
     }
@@ -86,6 +92,7 @@ class ActivityLogin : AppCompatActivity() {
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w("", "signInWithCredential:failure", task.exception)
+                    progressbar.visibility = View.INVISIBLE
                 }
             }
     }
