@@ -3,19 +3,15 @@ package org.netizencoders.kotaquest
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class   MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
     private lateinit var tv: TextView
-    private lateinit var button: Button
-    private lateinit var sp1: Button
-    private lateinit var sp2: Button
-    private lateinit var sp3: Button
+    private lateinit var bottomNavigationView: BottomNavigationView
 
     private val db = Firebase.firestore
 
@@ -31,39 +27,40 @@ class   MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test)
 
-        Log.d("", "Start")
-
-        tv = findViewById(R.id.tvstatus)
-
-        button = findViewById(R.id.buttontest)
-        button.setOnClickListener {
-            Toast.makeText(this@MainActivity, "Firebase test", Toast.LENGTH_SHORT).show()
-            status = "Loading"
-            tv.text = status
-//            addData()
-            readData()
+        bottomNavigationView = findViewById(R.id.bottomNavigationView)
+        bottomNavigationView.setOnNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.h1 -> move("1")
+                R.id.h2 -> move("2")
+                R.id.h3 -> move("3")
+            }
+            true
         }
-
-        sp1 = findViewById(R.id.listquest)
-        sp1.setOnClickListener {
-            val moveIntent = Intent(this, ActivityListQuest::class.java)
-            startActivity(moveIntent)
-        }
-
-        sp2 = findViewById(R.id.login)
-        sp2.setOnClickListener {
-            val moveIntent = Intent(this, ActivityLogin::class.java)
-            startActivity(moveIntent)
-        }
-
-        sp3 = findViewById(R.id.newquest)
-        sp3.setOnClickListener {
-            val moveIntent = Intent(this, ActivityNewQuest::class.java)
-            startActivity(moveIntent)
-        }
-
     }
 
+    override fun onBackPressed() {
+        moveTaskToBack(true)
+    }
+
+    private fun move(nav: String) {
+        when (nav) {
+            "1" -> {
+                val intent = Intent(this,ActivityListQuests::class.java)
+                startActivity(intent)
+                finish()
+            }
+            "2" -> {
+                val intent = Intent(this,ActivityListQuestsTaken::class.java)
+                startActivity(intent)
+                finish()
+            }
+            "3" -> {
+                val intent = Intent(this,ActivityNewQuest::class.java)
+                startActivity(intent)
+                finish()
+            }
+        }
+    }
 
 
     private fun addData() {
