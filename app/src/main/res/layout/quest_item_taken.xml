@@ -8,7 +8,7 @@
     android:paddingHorizontal="10dp">
 
     <TextView
-        android:id="@+id/quest_item_title"
+        android:id="@+id/quest_item_taken_title"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -21,7 +21,7 @@
         />
 
     <TextView
-        android:id="@+id/quest_item_location"
+        android:id="@+id/quest_item_taken_location"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -33,12 +33,12 @@
         app:autoSizeMaxTextSize="15sp"
         android:ellipsize="end"
         android:text="Location"
-        app:layout_constraintTop_toBottomOf="@+id/quest_item_title"
+        app:layout_constraintTop_toBottomOf="@+id/quest_item_taken_title"
         app:layout_constraintLeft_toLeftOf="parent"
         />
 
     <TextView
-        android:id="@+id/quest_item_description"
+        android:id="@+id/quest_item_taken_description"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -50,12 +50,12 @@
         app:autoSizeMaxTextSize="15sp"
         android:ellipsize="end"
         android:text="Description"
-        app:layout_constraintTop_toBottomOf="@+id/quest_item_location"
+        app:layout_constraintTop_toBottomOf="@+id/quest_item_taken_location"
         app:layout_constraintLeft_toLeftOf="parent"
         />
 
     <ImageView
-        android:id="@+id/quest_item_image"
+        android:id="@+id/quest_item_taken_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxWidth="350dp"
@@ -64,11 +64,11 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/quest_item_description"
+        app:layout_constraintTop_toBottomOf="@+id/quest_item_taken_description"
         />
 
     <Button
-        android:id="@+id/quest_item_btnR"
+        android:id="@+id/quest_item_taken_btnR"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -76,10 +76,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/quest_item_image" />
+        app:layout_constraintTop_toBottomOf="@+id/quest_item_taken_image" />
 
     <Button
-        android:id="@+id/quest_item_btnL"
+        android:id="@+id/quest_item_taken_btnL"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -87,7 +87,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/quest_item_image" />
+        app:layout_constraintTop_toBottomOf="@+id/quest_item_taken_image" />
 
     <View
         android:layout_width="match_parent"
