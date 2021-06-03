@@ -34,6 +34,7 @@ var storageReference: StorageReference? = null
 class ActivityNewQuest : AppCompatActivity() {
     private lateinit var imageView: ImageView
     private lateinit var btnChoose: Button
+    private lateinit var btnCancel: Button
     private lateinit var btnContinue: Button
     private lateinit var qTitle: EditText
     private lateinit var qLocation: EditText
@@ -55,6 +56,7 @@ class ActivityNewQuest : AppCompatActivity() {
 
         imageView = findViewById(R.id.imgView)
         btnChoose = findViewById(R.id.btnChoose)
+        btnCancel = findViewById(R.id.newquest_cancel)
         btnContinue = findViewById(R.id.newquest_post)
         qTitle = findViewById(R.id.newquest_name)
         qLocation = findViewById(R.id.newquest_location)
@@ -70,6 +72,11 @@ class ActivityNewQuest : AppCompatActivity() {
 
         btnChoose.setOnClickListener {
             chooseImage()
+        }
+
+        btnCancel.setOnClickListener {
+            val moveIntent = Intent(this, ActivityListQuest::class.java)
+            startActivity(moveIntent)
         }
 
         btnContinue.setOnClickListener {
@@ -147,7 +154,7 @@ class ActivityNewQuest : AppCompatActivity() {
     }
 
     private fun prepareQuest() {
-        val q = Quest(qTitle.text.toString(), qLocation.text.toString(), qDesc.text.toString(),
+        val q = Quest("", qTitle.text.toString(), qLocation.text.toString(), qDesc.text.toString(),
             qImgURL
         )
         data = HashMap()
