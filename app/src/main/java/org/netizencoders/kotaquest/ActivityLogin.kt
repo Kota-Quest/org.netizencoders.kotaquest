@@ -25,6 +25,8 @@ class ActivityLogin : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        supportActionBar?.hide()
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("707484987537-jss0re8cje6mgi7tipp5immtfrjpvg69.apps.googleusercontent.com")
             .requestEmail()
@@ -42,10 +44,9 @@ class ActivityLogin : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            val moveIntent = Intent(this, ActivityListQuest::class.java)
+            val moveIntent = Intent(this, ActivityListQuests::class.java)
             startActivity(moveIntent)
         }
     }
@@ -62,11 +63,10 @@ class ActivityLogin : AppCompatActivity() {
                 val account = task.getResult(ApiException::class.java)!!
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
                 firebaseAuthWithGoogle(account.idToken!!)
-                Toast.makeText(this, "Signed in", Toast.LENGTH_SHORT).show()
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e)
-                Toast.makeText(this, "Sign in failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Sign in failed", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -80,7 +80,8 @@ class ActivityLogin : AppCompatActivity() {
                     Log.d("", "signInWithCredential:success")
                     Log.d("", auth.currentUser?.uid.toString())
                     uid = auth.currentUser?.uid.toString()
-                    val moveIntent = Intent(this, ActivityListQuest::class.java)
+                    Toast.makeText(this, "Signed in", Toast.LENGTH_LONG).show()
+                    val moveIntent = Intent(this, ActivityListQuests::class.java)
                     startActivity(moveIntent)
                 } else {
                     // If sign in fails, display a message to the user.
