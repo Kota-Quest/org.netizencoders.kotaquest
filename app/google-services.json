@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "707484987537-8n8qdobqj2ojjobcs1lqejnudtt4fo6k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.netizencoders.kotaquest",
+            "certificate_hash": "467c66749e6747297d832f558cf023dcd745d9c0"
+          }
+        },
+        {
           "client_id": "707484987537-jss0re8cje6mgi7tipp5immtfrjpvg69.apps.googleusercontent.com",
           "client_type": 3
         }
