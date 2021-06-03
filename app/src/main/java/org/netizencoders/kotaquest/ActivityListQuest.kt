@@ -164,7 +164,7 @@ class ActivityListQuest : AppCompatActivity() {
     private fun postQuest() {
         if (!data.isNullOrEmpty()) {
             val db = FirebaseFirestore.getInstance()
-            db.collection("myquests")
+            db.collection("${ActivityLogin.uid}-myquests")
                 .add(data)
                 .addOnSuccessListener {
                     Toast.makeText(this, "It's yours. Good luck!",Toast.LENGTH_SHORT).show()
