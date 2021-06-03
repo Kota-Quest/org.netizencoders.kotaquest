@@ -141,7 +141,7 @@ class ActivityListQuests : AppCompatActivity() {
     }
 
     private fun takeQuest(quest: Quest) {
-        val builder = AlertDialog.Builder(applicationContext)
+        val builder = AlertDialog.Builder(this)
 
         builder.setTitle(quest.Title)
         builder.setMessage("Are you sure you want to take this Quest?")
