@@ -35,7 +35,7 @@ class ActivityListQuests : AppCompatActivity() {
         noDataLabel = findViewById(R.id.quest_list_no_data)
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
-        bottomNavigationView.selectedItemId = R.id.h2
+        bottomNavigationView.selectedItemId = R.id.h1
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.h1 -> move("1")
