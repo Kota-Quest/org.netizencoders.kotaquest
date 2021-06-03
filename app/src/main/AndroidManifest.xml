@@ -14,13 +14,12 @@
         android:roundIcon="@drawable/logokq"
         android:supportsRtl="true"
         android:theme="@style/Theme.KotaQuest">
-        <activity android:name=".ActivityListQuestsTaken"></activity>
         <activity
-            android:name=".ActivityListQuests"
+            android:name=".ActivityListQuestsTaken"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ActivityListMyQuests"
+            android:name=".ActivityListQuests"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
