@@ -8,21 +8,20 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import org.netizencoders.kotaquest.models.Quest
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -32,20 +31,21 @@ var storageReference: StorageReference? = null
 
 
 class ActivityNewQuest : AppCompatActivity() {
+    private lateinit var progressbar: ProgressBar
+    private lateinit var view: ConstraintLayout
     private lateinit var imageView: ImageView
     private lateinit var btnChoose: Button
     private lateinit var btnCancel: Button
     private lateinit var btnContinue: Button
     private lateinit var qTitle: EditText
     private lateinit var qLocation: EditText
-    private lateinit var qDesc: EditText
-    private lateinit var qImgURL: String
+    private lateinit var qDescription: EditText
+    private lateinit var qImageURL: String
 
     private var filePath: Uri? = null
     private val PICK_IMAGE_REQUEST = 71
 
     private lateinit var imagePicker: ActivityResultLauncher<Intent>
-    private lateinit var data: HashMap<String, Any>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,29 +53,27 @@ class ActivityNewQuest : AppCompatActivity() {
 
         storage = FirebaseStorage.getInstance()
         storageReference = storage!!.reference
+        imagePicker =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                onActivityResult(PICK_IMAGE_REQUEST, result)
+            }
 
-        imageView = findViewById(R.id.imgView)
-        btnChoose = findViewById(R.id.btnChoose)
-        btnCancel = findViewById(R.id.newquest_cancel)
-        btnContinue = findViewById(R.id.newquest_post)
-        qTitle = findViewById(R.id.newquest_name)
-        qLocation = findViewById(R.id.newquest_location)
-        qDesc = findViewById(R.id.newquest_desc)
-        qTitle.setText("")
-        qLocation.setText("")
-        qDesc.setText("")
-        qImgURL = ""
-
-        imagePicker = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            onActivityResult(PICK_IMAGE_REQUEST, result)
-        }
+        view = findViewById(R.id.new_quest_full)
+        progressbar = findViewById(R.id.new_quest_progressbar)
+        imageView = findViewById(R.id.new_quest_image)
+        btnChoose = findViewById(R.id.new_quest_choose)
+        btnCancel = findViewById(R.id.new_quest_cancel)
+        btnContinue = findViewById(R.id.new_quest_post)
+        qTitle = findViewById(R.id.new_quest_title)
+        qLocation = findViewById(R.id.new_quest_location)
+        qDescription = findViewById(R.id.new_quest_description)
 
         btnChoose.setOnClickListener {
             chooseImage()
         }
 
         btnCancel.setOnClickListener {
-            val moveIntent = Intent(this, ActivityListQuest::class.java)
+            val moveIntent = Intent(this, ActivityListQuests::class.java)
             startActivity(moveIntent)
         }
 
@@ -86,7 +84,11 @@ class ActivityNewQuest : AppCompatActivity() {
 
     private fun commit() {
         Toast.makeText(this, "Processing...", Toast.LENGTH_LONG).show()
-        if(filePath != null) {
+
+        view.visibility = View.INVISIBLE
+        progressbar.visibility = View.VISIBLE
+
+        if (filePath != null) {
             uploadImage()
         } else {
             prepareQuest()
@@ -97,38 +99,16 @@ class ActivityNewQuest : AppCompatActivity() {
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
-        imagePicker.launch(Intent.createChooser(
-            intent,
-            "Please select..."
-        ))
-    }
-
-    private fun uploadImage() {
-        if(filePath != null){
-            val ref = storageReference?.child("images/" + UUID.randomUUID().toString())
-            val uploadTask = ref?.putFile(filePath!!)
-
-            uploadTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
-                if (!task.isSuccessful) {
-                    task.exception?.let {
-                        throw it
-                    }
-                }
-                return@Continuation ref.downloadUrl
-            })?.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val downloadUri = task.result
-                    qImgURL = downloadUri.toString()
-                    prepareQuest()
-                }
-            }?.addOnFailureListener{
-                Toast.makeText(this, "Error: " + it.localizedMessage, Toast.LENGTH_LONG).show()
-            }
-        }
+        imagePicker.launch(
+            Intent.createChooser(
+                intent,
+                "Select a picture"
+            )
+        )
     }
 
     private fun onActivityResult(requestCode: Int, result: ActivityResult) {
-        if(result.resultCode == Activity.RESULT_OK) {
+        if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
             when (requestCode) {
                 PICK_IMAGE_REQUEST -> {
@@ -153,33 +133,75 @@ class ActivityNewQuest : AppCompatActivity() {
         }
     }
 
-    private fun prepareQuest() {
-        val q = Quest("", qTitle.text.toString(), qLocation.text.toString(), qDesc.text.toString(),
-            qImgURL
-        )
-        data = HashMap()
-        data["Title"] = q.Title.toString()
-        data["Location"] = q.Location.toString()
-        data["Description"] = q.Description.toString()
-        data["ImageURL"] = q.ImageURL.toString()
+    private fun uploadImage() {
+        if (filePath != null) {
+            val ref = storageReference?.child("images/" + UUID.randomUUID().toString())
+            val uploadTask = ref?.putFile(filePath!!)
 
-        Log.d("", data.toString())
+            uploadTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                return@Continuation ref.downloadUrl
+            })?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val downloadUri = task.result
+                    qImageURL = downloadUri.toString()
+                    prepareQuest()
+                }
+            }?.addOnFailureListener {
+                Toast.makeText(this, "Error: " + it.localizedMessage, Toast.LENGTH_LONG).show()
 
-        postQuest()
+                view.visibility = View.VISIBLE
+                progressbar.visibility = View.INVISIBLE
+            }
+        }
     }
 
-    private fun postQuest() {
+    fun prepareQuest() {
+        val quest = Quest(
+            "", qTitle.text.toString(), qLocation.text.toString(), qDescription.text.toString(),
+            qImageURL, "", "", "", ""
+        )
+
+        val data: HashMap<String, Any> = HashMap()
+        data["ID"] = quest.ID.toString()
+        data["Title"] = quest.Title.toString()
+        data["Location"] = quest.Location.toString()
+        data["Description"] = quest.Description.toString()
+        data["ImageURL"] = quest.ImageURL.toString()
+        data["Status"] = quest.Status.toString()
+        data["Poster"] = quest.Poster.toString()
+        data["DatePosted"] = quest.DatePosted.toString()
+        data["DateCompleted"] = quest.DateCompleted.toString()
+
+        postQuest(data)
+    }
+
+
+    private fun postQuest(data: HashMap<String, Any>) {
         if (!data.isNullOrEmpty()) {
             val db = FirebaseFirestore.getInstance()
             db.collection("quests")
                 .add(data)
                 .addOnSuccessListener { documentReference ->
-                    Toast.makeText(this, "Quest posted. \nID: ${documentReference.id}", Toast.LENGTH_LONG).show()
-                    val moveIntent = Intent(this, ActivityListQuest::class.java)
+                    Toast.makeText(
+                        this,
+                        "Quest posted. \nID: ${documentReference.id}",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    val moveIntent = Intent(this, ActivityListQuests::class.java)
                     startActivity(moveIntent)
+                    finish()
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(this, "Error: $e", Toast.LENGTH_LONG).show()
+
+                    view.visibility = View.VISIBLE
+                    progressbar.visibility = View.INVISIBLE
                 }
         }
     }
