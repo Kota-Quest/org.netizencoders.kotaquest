@@ -19,7 +19,7 @@ class ListDataAdapter2(private val data: ArrayList<Quest>): RecyclerView.Adapter
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ListViewHolder {
-        val view: View = LayoutInflater.from(viewGroup.context).inflate(R.layout.quest_item, viewGroup, false)
+        val view: View = LayoutInflater.from(viewGroup.context).inflate(R.layout.quest_item_taken, viewGroup, false)
         return ListViewHolder(view)
     }
 
@@ -27,19 +27,19 @@ class ListDataAdapter2(private val data: ArrayList<Quest>): RecyclerView.Adapter
         val item = data[position]
 
         if (!item.ImageURL.isNullOrEmpty()) {
-            holder.qImage.layoutParams.height = 350
-            holder.qImage.layoutParams.width = 197
-            holder.qImage.requestLayout()
+            holder.qImage?.layoutParams?.height = 350
+            holder.qImage?.layoutParams?.width = 197
+            holder.qImage?.requestLayout()
 
             Picasso.get().load(item.ImageURL).into(holder.qImage)
         }
 
-        holder.qTitle.text=item.Title
-        holder.qLocation.text=item.Location
-        holder.qDescription.text=item.Description
+        holder.qTitle?.text=item.Title
+        holder.qLocation?.text=item.Location
+        holder.qDescription?.text=item.Description
 
-        holder.btnR.setOnClickListener { onItemBtnClickCallback.onItemBtnClicked(data[holder.bindingAdapterPosition], "btnR") }
-        holder.btnL.setOnClickListener { onItemBtnClickCallback.onItemBtnClicked(data[holder.bindingAdapterPosition], "btnL") }
+        holder.btnR?.setOnClickListener { onItemBtnClickCallback.onItemBtnClicked(data[holder.bindingAdapterPosition], "btnR") }
+        holder.btnL?.setOnClickListener { onItemBtnClickCallback.onItemBtnClicked(data[holder.bindingAdapterPosition], "btnL") }
     }
 
     interface OnItemBtnClickCallback {
@@ -51,12 +51,12 @@ class ListDataAdapter2(private val data: ArrayList<Quest>): RecyclerView.Adapter
     }
 
     inner class ListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        var qTitle: TextView = itemView.findViewById(R.id.quest_item_taken_title)
-        var qLocation: TextView = itemView.findViewById(R.id.quest_item_taken_location)
-        var qDescription: TextView = itemView.findViewById(R.id.quest_item_taken_description)
-        var qImage: ImageView = itemView.findViewById(R.id.quest_item_taken_image)
-        var btnR: Button = itemView.findViewById(R.id.quest_item_taken_btnR)
-        var btnL: Button = itemView.findViewById(R.id.quest_item_taken_btnL)
+        var qTitle: TextView? = itemView.findViewById(R.id.quest_item_taken_title)
+        var qLocation: TextView? = itemView.findViewById(R.id.quest_item_taken_location)
+        var qDescription: TextView? = itemView.findViewById(R.id.quest_item_taken_description)
+        var qImage: ImageView? = itemView.findViewById(R.id.quest_item_taken_image)
+        var btnR: Button? = itemView.findViewById(R.id.quest_item_taken_btnR)
+        var btnL: Button? = itemView.findViewById(R.id.quest_item_taken_btnL)
     }
 }
 
