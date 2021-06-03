@@ -74,7 +74,7 @@ class ActivityListMyQuests : AppCompatActivity() {
         listofquest = arrayListOf()
 
         val db = FirebaseFirestore.getInstance()
-        db.collection("myquests")
+        db.collection("${ActivityLogin.uid}-myquests")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
@@ -175,7 +175,7 @@ class ActivityListMyQuests : AppCompatActivity() {
         buttonFinish.visibility = View.INVISIBLE
 
         val db = FirebaseFirestore.getInstance()
-        db.collection("myquests").document(qID)
+        db.collection("${ActivityLogin.uid}-myquests").document(qID)
             .delete()
             .addOnSuccessListener { Log.d("", "DocumentSnapshot successfully deleted!") }
             .addOnFailureListener { e -> Log.w("", "Error deleting document", e) }
