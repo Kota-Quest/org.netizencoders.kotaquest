@@ -71,7 +71,7 @@ class ActivityListQuestsTaken : AppCompatActivity() {
                 finish()
             }
             "3" -> {
-                val intent = Intent(this,ActivityNewQuest::class.java)
+                val intent = Intent(this,ActivityPostedQuests::class.java)
                 startActivity(intent)
                 finish()
             }
@@ -86,11 +86,11 @@ class ActivityListQuestsTaken : AppCompatActivity() {
         progressbar.visibility = View.VISIBLE
 
         val db = FirebaseFirestore.getInstance()
-        db.collection(ActivityLogin.uid+"-quests-taken")
+        db.collection("quests")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    if (document.data["Status"].toString()!="Completed") {
+                    if (document.data["Quester"].toString()==ActivityLogin.uid && document.data["Status"].toString() == "In Progress") {
                         Log.d("", document.toString())
                         val quest = Quest(
                             document.reference.id,
@@ -100,8 +100,11 @@ class ActivityListQuestsTaken : AppCompatActivity() {
                             document.data["ImageURL"].toString(),
                             document.data["Status"].toString(),
                             document.data["Poster"].toString(),
+                            document.data["Quester"].toString(),
                             document.data["DatePosted"].toString(),
-                            document.data["DateCompleted"].toString()
+                            document.data["DateCompleted"].toString(),
+                            document.data["ReportDescription"].toString(),
+                            document.data["ReportImageURL"].toString()
                         )
                         data.add(quest)
                     }
@@ -134,7 +137,9 @@ class ActivityListQuestsTaken : AppCompatActivity() {
             override fun onItemBtnClicked(data: Quest, button: String) {
                 when (button) {
                     "btnR" -> {
-                        finishQuest(data)
+                        qid = data.ID.toString()
+                        val moveIntent = Intent(applicationContext, ActivityReportQuest::class.java)
+                        startActivity(moveIntent)
                     }
 
                     "btnL" -> {
@@ -145,16 +150,17 @@ class ActivityListQuestsTaken : AppCompatActivity() {
         })
     }
 
-    private fun finishQuest(quest: Quest) {
+    private fun dropQuest(quest: Quest) {
         val builder = AlertDialog.Builder(this)
 
         builder.setTitle(quest.Title)
-        builder.setMessage("Report and finish Quest?")
+        builder.setMessage("Are you sure you want to drop this Quest?")
 
         builder.setPositiveButton(
             "Yes") { _, _ ->
-            removeQuest(quest.ID.toString(), ActivityLogin.uid+"-quests-taken")
-            Toast.makeText(this, "Quest finished", Toast.LENGTH_SHORT).show()
+            updateQuest("quests/"+quest.ID.toString(), "Status", "Posted")
+            updateQuest("quests/"+quest.ID.toString(), "Quester", "")
+
             val moveIntent = Intent(this, ActivityListQuestsTaken::class.java)
             startActivity(moveIntent)
         }
@@ -166,65 +172,20 @@ class ActivityListQuestsTaken : AppCompatActivity() {
         builder.show()
     }
 
-    private fun dropQuest(quest: Quest) {
-        val builder = AlertDialog.Builder(this)
-
-        builder.setTitle(quest.Title)
-        builder.setMessage("Are you sure you want to drop this Quest?")
-
-        builder.setPositiveButton(
-            "Yes") { _, _ ->
-            prepareQuest(quest)
-        }
-
-        builder.setNegativeButton(
-            "No") { _, _ ->
-        }
-
-        builder.show()
+    private fun updateQuest(path: String, Field: String, Value: String) {
+        val db = FirebaseFirestore.getInstance()
+        db.document(path)
+            .update(Field, Value)
+            .addOnSuccessListener {
+                Log.d("", "Update Success")
+            }
+            .addOnFailureListener { e ->
+                Log.d("", "Error $e")
+                Toast.makeText(this, "Error: $e", Toast.LENGTH_LONG).show()
+            }
     }
 
-    private fun prepareQuest(quest: Quest) {
-        val data: HashMap<String, Any> = HashMap()
-        data["ID"] = quest.ID.toString()
-        data["Title"] = quest.Title.toString()
-        data["Location"] = quest.Location.toString()
-        data["Description"] = quest.Description.toString()
-        data["ImageURL"] = quest.ImageURL.toString()
-        data["Status"] = "Posted"
-        data["Poster"] = quest.Poster.toString()
-        data["DatePosted"] = quest.DatePosted.toString()
-        data["DateCompleted"] = quest.DateCompleted.toString()
-
-        removeQuest(quest.ID.toString(), ActivityLogin.uid+"-quests-taken")
-        postQuest(data, "quests")
-    }
-
-    private fun removeQuest(questID: String, path: String) {
-        if (questID.isNotEmpty()) {
-            val db = FirebaseFirestore.getInstance()
-            db.collection(path).document(questID)
-                .delete()
-                .addOnSuccessListener { Log.d("", "DocumentSnapshot successfully deleted!") }
-                .addOnFailureListener { e -> Log.w("", "Error deleting document", e) }
-        }
-    }
-
-    private fun postQuest(data: HashMap<String, Any>, path: String) {
-        if (!data.isNullOrEmpty()) {
-            val db = FirebaseFirestore.getInstance()
-            db.collection(path)
-                .add(data)
-                .addOnSuccessListener {
-                    Log.d("", "Success")
-                    Toast.makeText(this, "Successfully dropped Quest", Toast.LENGTH_SHORT).show()
-                    val moveIntent = Intent(this, ActivityListQuestsTaken::class.java)
-                    startActivity(moveIntent)
-                }
-                .addOnFailureListener { e ->
-                    Log.d("", "Error $e")
-                    Toast.makeText(this, "Error: $e", Toast.LENGTH_LONG).show()
-                }
-        }
+    companion object {
+        var qid = ""
     }
 }
