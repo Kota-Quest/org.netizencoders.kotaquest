@@ -22,6 +22,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import org.netizencoders.kotaquest.models.Quest
+import java.nio.charset.StandardCharsets.UTF_8
+import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -51,6 +53,8 @@ class ActivityNewQuest : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newquest)
+
+        supportActionBar?.hide()
 
         storage = FirebaseStorage.getInstance()
         storageReference = storage!!.reference
@@ -162,13 +166,15 @@ class ActivityNewQuest : AppCompatActivity() {
         }
     }
 
-    fun prepareQuest() {
+    private fun sha256(str: String): ByteArray = MessageDigest.getInstance("SHA-256").digest(str.toByteArray(UTF_8))
+
+    private fun prepareQuest() {
         val simpleDateFormat = SimpleDateFormat.getDateTimeInstance()
         val currentDateAndTime: String = simpleDateFormat.format(Date())
 
         val quest = Quest(
-            "", qTitle.text.toString(), qLocation.text.toString(), qDescription.text.toString(),
-            qImageURL, "Posted", ActivityLogin.uid, currentDateAndTime, ""
+            sha256(ActivityLogin.uid+" "+currentDateAndTime).toString(), qTitle.text.toString(), qLocation.text.toString(), qDescription.text.toString(),
+            qImageURL, "Posted", ActivityLogin.uid, "", currentDateAndTime, "", "", ""
         )
 
         val data: HashMap<String, Any> = HashMap()
@@ -179,8 +185,11 @@ class ActivityNewQuest : AppCompatActivity() {
         data["ImageURL"] = quest.ImageURL.toString()
         data["Status"] = quest.Status.toString()
         data["Poster"] = quest.Poster.toString()
+        data["Quester"] = quest.Quester.toString()
         data["DatePosted"] = quest.DatePosted.toString()
         data["DateCompleted"] = quest.DateCompleted.toString()
+        data["ReportDescription"] = quest.ReportDescription.toString()
+        data["ReportImageURL"] = quest.ReportImageURL.toString()
 
         postQuest(data)
     }
@@ -190,11 +199,12 @@ class ActivityNewQuest : AppCompatActivity() {
         if (!data.isNullOrEmpty()) {
             val db = FirebaseFirestore.getInstance()
             db.collection("quests")
-                .add(data)
-                .addOnSuccessListener { documentReference ->
+                .document(data["ID"].toString())
+                .set(data)
+                .addOnSuccessListener {
                     Toast.makeText(
                         this,
-                        "Quest posted. \nID: ${documentReference.id}",
+                        "Quest posted",
                         Toast.LENGTH_LONG
                     ).show()
 
