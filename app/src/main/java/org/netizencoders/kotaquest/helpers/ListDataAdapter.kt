@@ -27,11 +27,11 @@ class ListDataAdapter(private val data: ArrayList<Quest>): RecyclerView.Adapter<
         val item = data[position]
 
         if (!item.ImageURL.isNullOrEmpty()) {
-            holder.qImage.layoutParams.height = 350
-            holder.qImage.layoutParams.width = 197
+            holder.qImage.layoutParams?.height = 197
+            holder.qImage.layoutParams?.width = 350
             holder.qImage.requestLayout()
 
-            Picasso.get().load(item.ImageURL).fit().centerInside().into(holder.qImage)
+            Picasso.get().load(item.ImageURL).fit().centerCrop().into(holder.qImage)
         }
 
         holder.qTitle.text=item.Title
