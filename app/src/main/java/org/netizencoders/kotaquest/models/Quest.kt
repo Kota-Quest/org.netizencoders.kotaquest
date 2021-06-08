@@ -8,6 +8,9 @@ data class Quest(
     var ImageURL: String? = "",
     var Status: String? = "",
     var Poster: String? = "",
+    var Quester: String? = "",
     var DatePosted: String? = "",
-    var DateCompleted: String? = ""
+    var DateCompleted: String? = "",
+    var ReportDescription: String? = "",
+    var ReportImageURL: String? = ""
 )
