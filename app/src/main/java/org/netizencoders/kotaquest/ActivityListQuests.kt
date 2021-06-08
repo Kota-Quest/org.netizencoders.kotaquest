@@ -70,7 +70,7 @@ class ActivityListQuests : AppCompatActivity() {
                 finish()
             }
             "3" -> {
-                val intent = Intent(this,ActivityNewQuest::class.java)
+                val intent = Intent(this,ActivityPostedQuests::class.java)
                 startActivity(intent)
                 finish()
             }
@@ -89,7 +89,7 @@ class ActivityListQuests : AppCompatActivity() {
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    if (document.data["Status"].toString()!="Completed") {
+                    if (document.data["Status"].toString()=="Posted") {
                         Log.d("", document.toString())
                         val quest = Quest(
                             document.reference.id,
@@ -99,8 +99,11 @@ class ActivityListQuests : AppCompatActivity() {
                             document.data["ImageURL"].toString(),
                             document.data["Status"].toString(),
                             document.data["Poster"].toString(),
+                            document.data["Quester"].toString(),
                             document.data["DatePosted"].toString(),
-                            document.data["DateCompleted"].toString()
+                            document.data["DateCompleted"].toString(),
+                            document.data["ReportDescription"].toString(),
+                            document.data["ReportImageURL"].toString()
                         )
                         data.add(quest)
                     }
@@ -148,7 +151,11 @@ class ActivityListQuests : AppCompatActivity() {
 
         builder.setPositiveButton(
             "Yes") { _, _ ->
-            prepareQuest(quest)
+            updateQuest("quests/"+quest.ID.toString(), "Status", "In Progress")
+            updateQuest("quests/"+quest.ID.toString(), "Quester", ActivityLogin.uid)
+
+            val moveIntent = Intent(this, ActivityListQuestsTaken::class.java)
+            startActivity(moveIntent)
         }
 
         builder.setNegativeButton(
@@ -158,47 +165,16 @@ class ActivityListQuests : AppCompatActivity() {
         builder.show()
     }
 
-    private fun prepareQuest(quest: Quest) {
-        val data: HashMap<String, Any> = HashMap()
-        data["ID"] = quest.ID.toString()
-        data["Title"] = quest.Title.toString()
-        data["Location"] = quest.Location.toString()
-        data["Description"] = quest.Description.toString()
-        data["ImageURL"] = quest.ImageURL.toString()
-        data["Status"] = "In Progress"
-        data["Poster"] = quest.Poster.toString()
-        data["DatePosted"] = quest.DatePosted.toString()
-        data["DateCompleted"] = quest.DateCompleted.toString()
-
-        removeQuest(quest.ID.toString(), "quests")
-        postQuest(data, ActivityLogin.uid+"-quests-taken")
-    }
-
-    private fun removeQuest(questID: String, path: String) {
-        if (questID.isNotEmpty()) {
-            val db = FirebaseFirestore.getInstance()
-            db.collection(path).document(questID)
-                .delete()
-                .addOnSuccessListener { Log.d("", "DocumentSnapshot successfully deleted!") }
-                .addOnFailureListener { e -> Log.w("", "Error deleting document", e) }
+    private fun updateQuest(path: String, Field: String, Value: String) {
+        val db = FirebaseFirestore.getInstance()
+        db.document(path)
+            .update(Field, Value)
+            .addOnSuccessListener {
+                Log.d("", "Update Success")
+            }
+            .addOnFailureListener { e ->
+                Log.d("", "Error $e")
+                Toast.makeText(this, "Error: $e", Toast.LENGTH_LONG).show()
+            }
         }
-    }
-
-    private fun postQuest(data: HashMap<String, Any>, path: String) {
-        if (!data.isNullOrEmpty()) {
-            val db = FirebaseFirestore.getInstance()
-            db.collection(path)
-                .add(data)
-                .addOnSuccessListener {
-                    Log.d("", "Success")
-                    Toast.makeText(this, "It's yours. Good luck!",Toast.LENGTH_SHORT).show()
-                    val moveIntent = Intent(this, ActivityListQuestsTaken::class.java)
-                    startActivity(moveIntent)
-                }
-                .addOnFailureListener { e ->
-                    Log.d("", "Error $e")
-                    Toast.makeText(this, "Error: $e", Toast.LENGTH_LONG).show()
-                }
-        }
-    }
 }
