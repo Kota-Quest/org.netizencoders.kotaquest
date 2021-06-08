@@ -10,6 +10,6 @@
         android:icon="@drawable/logokq"/>
     <item
         android:id="@+id/h3"
-        android:title="Post a Quest"
+        android:title="Posted Quests"
         android:icon="@drawable/logokq"/>
 </menu>
